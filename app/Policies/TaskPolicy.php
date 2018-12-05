@@ -12,10 +12,16 @@ class TaskPolicy
 
     public function update(User $user, Task $task)
     {
+        if($task == null){
+            return false;
+        }
         return $task->toDoList->user->id == $user->id;
     }
 
     public function matchesList(User $user, Task $task, $toDoListId){
+        if($task == null){
+            return false;
+        }
         return $task->list_id == $toDoListId;
     }
 }

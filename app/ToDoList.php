@@ -7,11 +7,15 @@ use App\User;
 
 class ToDoList extends Model
 {
-    protected $fillable = ['user_id','title'];
+    const USER_ID       = 'user_id';
+    const TITLE         = 'title';
+    const TODO_LIST_ID  = 'list_id';
+
+    protected $fillable = [self::USER_ID, self::TITLE];
 
     public function tasks()
     {
-    	return $this->hasMany('\App\Task','list_id');
+    	return $this->hasMany('\App\Task', self::TODO_LIST_ID);
     }
 
     public function isOwnedBy(User $user)

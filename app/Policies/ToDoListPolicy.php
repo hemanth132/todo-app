@@ -12,6 +12,9 @@ class ToDoListPolicy
 
     public function update(User $user, ToDoList $toDoList)
     {
+        if($toDoList == null){
+            return false;
+        }
         return $toDoList->user_id == $user->id;
     }
 }

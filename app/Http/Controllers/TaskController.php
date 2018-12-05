@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Fields;
 use App\Task;
 use App\ToDoList;
 use App\User;
@@ -13,10 +14,6 @@ class TaskController extends Controller
     public function index($toDoListId)
     {
         $toDoList = ToDoList::find($toDoListId);
-        if($toDoList == null)
-        {
-            return null;
-        }
         $this->authorize('update', $toDoList);
         return $toDoList->tasks;
     }
@@ -24,17 +21,14 @@ class TaskController extends Controller
     public function store($toDoListId)
     {
         $toDoList = ToDoList::find($toDoListId);
-        if($toDoList == null)
-        {
-            return null;
-        }
         $this->authorize('update', $toDoList);
+
         request()->validate([
-            'description' => 'required'
+            Fields::DESCRIPTION => 'required'
         ]);
 
         $task = new Task();
-        $task->description = request()->input('description');
+        $task->{Task::DESCRIPTION} = request()->input(Fields::DESCRIPTION);
         $toDoList->tasks()->save($task);
 
         return $task;
@@ -46,11 +40,10 @@ class TaskController extends Controller
         $this->authorize('matchesList', [$task, $toDoListId]);
 
         request()->validate([
-            'status' => 'required'
+            Fields::STATUS => 'required|in:'.implode(',', [config('constants.TASK_STATUS_COMPLETE'), config('constants.TASK_STATUS_INCOMPLETE')])
         ]);
-        $attributes = request()->only(['status']);
 
-        $task->update($attributes);
+        $task->update(request()->only([Fields::STATUS]));
         return $task;
     }
 

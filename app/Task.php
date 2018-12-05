@@ -7,9 +7,13 @@ use App\ToDoList;
 
 class Task extends Model
 {
-    protected $fillable = ['list_id','description','status'];
+    const TODO_LIST_ID  = 'list_id';
+    const DESCRIPTION   = 'description';
+    const STATUS        = 'status';
+
+    protected $fillable = [self::TODO_LIST_ID, self::DESCRIPTION, self::STATUS];
 
     public function toDoList(){
-    	return $this->belongsTo('\App\ToDoList', 'list_id');
+    	return $this->belongsTo('\App\ToDoList', self::TODO_LIST_ID);
     }
 }

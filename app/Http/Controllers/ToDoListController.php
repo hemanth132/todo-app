@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Fields;
 use App\Policies\ToDoListPolicy;
 use App\ToDoList;
 use Illuminate\Http\Request;
@@ -18,14 +19,13 @@ class ToDoListController extends Controller
     public function store(Request $request)
     {
         request()->validate([
-            'title' => 'required'
+            Fields::TITLE => 'required'
         ]);
 
         $user = Auth::user();
-        $title = $request->input('title');
 
         $todoList = new \App\ToDoList();
-        $todoList->title = $title;
+        $todoList->{ToDoList::TITLE} = $request->input(Fields::TITLE);
         $user->todoLists()->save($todoList);
 
         return $todoList;
@@ -35,7 +35,6 @@ class ToDoListController extends Controller
     {
         $toDoList = ToDoList::with('tasks')->find($id);
         $this->authorize('update',$toDoList);
-        $toDoList->user;
         return $toDoList;
     }
 

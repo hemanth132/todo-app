@@ -27,7 +27,8 @@ Route::post('/user', 'UserController@store');
 
 Route::resource('todolists', 'ToDoListController')->only(['index','store','show','destroy'])->middleware('auth:basic_auth');
 
-Route::get('/todolists/{todolist}/tasks', 'TaskController@index')->middleware('auth:basic_auth');;
-Route::post('/todolists/{todolist}/tasks', 'TaskController@store')->middleware('auth:basic_auth');;
-Route::delete('/todolists/{todolist}/tasks/{taskId}', 'TaskController@destroy')->middleware('auth:basic_auth');;
-Route::patch('/todolists/{todolist}/tasks/{taskId}', 'TaskController@update')->middleware('auth:basic_auth');;
+Route::get('/todolists/{todolist}/tasks', 'TaskController@index')->middleware('auth:basic_auth')->where('todolist', '[0-9]+');
+Route::post('/todolists/{todolist}/tasks', 'TaskController@store')->middleware('auth:basic_auth')->where('todolist', '[0-9]+');
+
+Route::delete('/todolists/{todolist}/tasks/{taskId}', 'TaskController@destroy')->middleware('auth:basic_auth')->where(['todolist' => '[0-9]+', 'taskId' => '[0-9]+']);
+Route::patch('/todolists/{todolist}/tasks/{taskId}', 'TaskController@update')->middleware('auth:basic_auth')->where(['todolist' => '[0-9]+', 'taskId' => '[0-9]+']);
