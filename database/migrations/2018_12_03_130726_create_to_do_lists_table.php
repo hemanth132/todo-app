@@ -15,7 +15,7 @@ class CreateToDoListsTable extends Migration
     {
         Schema::create('to_do_lists', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id');
+            $table->unsignedInteger('user_id');
             $table->string('title');
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users');
@@ -23,11 +23,11 @@ class CreateToDoListsTable extends Migration
 
         Schema::create('tasks', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('list_id');
+            $table->unsignedInteger('list_id');
             $table->string('description');
             $table->enum('status', ['complete','incomplete'])->default('incomplete');
             $table->timestamps();
-            $table->foreign('list_id')->references('id')->on('to_do_lists');
+            $table->foreign('list_id')->references('id')->on('to_do_lists')->onDelete('cascade');
         });
     }
 
