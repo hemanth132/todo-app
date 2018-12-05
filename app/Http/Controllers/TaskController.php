@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Fields;
+use App\Services\TaskService;
 use App\Task;
 use App\ToDoList;
 use App\User;
@@ -11,6 +12,13 @@ use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
+    protected $taskService;
+
+    public function __construct(TaskService $taskService)
+    {
+        $this->taskService = $taskService;
+    }
+
     public function index($toDoListId)
     {
         $toDoList = ToDoList::find($toDoListId);
@@ -27,11 +35,7 @@ class TaskController extends Controller
             Fields::DESCRIPTION => 'required'
         ]);
 
-        $task = new Task();
-        $task->{Task::DESCRIPTION} = request()->input(Fields::DESCRIPTION);
-        $toDoList->tasks()->save($task);
-
-        return $task;
+        return $this->taskService->addTaskToList($toDoList);
     }
 
     public function update($toDoListId, $taskId){
@@ -43,8 +47,7 @@ class TaskController extends Controller
             Fields::STATUS => 'required|in:'.implode(',', [config('constants.TASK_STATUS_COMPLETE'), config('constants.TASK_STATUS_INCOMPLETE')])
         ]);
 
-        $task->update(request()->only([Fields::STATUS]));
-        return $task;
+        return $this->taskService->updateTaskStatus($task);
     }
 
     public function destroy($toDoListId, $taskId)

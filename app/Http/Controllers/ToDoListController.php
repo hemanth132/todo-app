@@ -4,12 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Fields;
 use App\Policies\ToDoListPolicy;
+use App\Services\ToDoListService;
 use App\ToDoList;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ToDoListController extends Controller
 {
+    protected $toDoListService;
+
+    public function __construct(ToDoListService $toDoListService)
+    {
+        $this->toDoListService = $toDoListService;
+    }
+
     public function index()
     {
         $user = Auth::user();
@@ -22,13 +30,7 @@ class ToDoListController extends Controller
             Fields::TITLE => 'required'
         ]);
 
-        $user = Auth::user();
-
-        $todoList = new \App\ToDoList();
-        $todoList->{ToDoList::TITLE} = $request->input(Fields::TITLE);
-        $user->todoLists()->save($todoList);
-
-        return $todoList;
+        return $this->toDoListService->addNewToDoList();
     }
 
     public function show($id)
