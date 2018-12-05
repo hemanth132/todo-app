@@ -5,7 +5,7 @@ use Faker\Generator as Faker;
 $factory->define(App\User::class, function (Faker $faker) {
     return [
         'email' => $faker->unique()->safeEmail,
-        'password' => '4bb52c85cb51237d8c57d894201a0c2d'
+        'password' => md5('hemanth')
     ];
 });
 

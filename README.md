@@ -7,10 +7,12 @@ Requirements:
 
 List of API:
 
-1. Create user
-2. Login user
-3. Get todo lists for a given user along with the tasks.
-4. Mark a task as complete/incomplete
-6. Add/Remove/Edit a task to a list
-7. Add/Delete list for a user
-8. Get tasks for a list
+GET | api/todolists -- get all tolists for a user
+POST     | api/todolists -- add new todo list for a user
+GET | api/todolists/{todolist} -- get a particular todolist
+DELETE   | api/todolists/{todolist} -- remove a particulat todolist
+POST     | api/todolists/{todolist}/tasks -- add a new task to a given todo list
+GET | api/todolists/{todolist}/tasks -- get all tasks for a given todolist
+PATCH    | api/todolists/{todolist}/tasks/{taskId} -- mark as complete/incokplete for a given task
+DELETE   | api/todolists/{todolist}/tasks/{taskId} -- delete a task
+POST     | api/user -- add a new user
