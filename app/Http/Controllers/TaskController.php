@@ -51,7 +51,6 @@ class TaskController extends Controller
         $attributes = request()->only(['status']);
 
         $task->update($attributes);
-        dump($task);
         return $task;
     }
 
